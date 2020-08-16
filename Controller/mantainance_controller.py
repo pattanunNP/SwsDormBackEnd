@@ -14,15 +14,17 @@ def login():
     respone = AcessControl.login(data)
     return respone
 
-@mantainance_api.route('/api/track/<refcode>', methods=["GET"])
-def track(refcode):
+@mantainance_api.route('/api/track/', methods=["GET"])
+def track():
+    refcode = request.args.get('id')
     respone = mantainance.track(refcode)
     return jsonify({"works": respone})
 
 
 @mantainance_api.route('/api/admin/', methods=["GET"])
-def admin(refcode):
-    respone = mantainance.track(refcode)
+def admin():
+    data = request.json
+    respone = mantainance.admin(data)
     return jsonify({"works":respone})
 
 @mantainance_api.route('/api/request-mantainance', methods=["POST", "GET"])
