@@ -20,12 +20,18 @@ def track():
     respone = mantainance.track(refcode)
     return jsonify({"works": respone})
 
-
-@mantainance_api.route('/api/admin/', methods=["GET"])
+@mantainance_api.route('/api/login', methods=["POST"])
 def admin():
-    data = request.json
-    respone = mantainance.admin(data)
-    return jsonify({"works":respone})
+    userInput = request.json
+    respone = mantainance.login(userInput)
+    return respone
+
+@mantainance_api.route('/api/get-allwork')
+def getallwork():
+    respone = mantainance.allwork()
+    return jsonify({"works": respone})
+
+
 
 @mantainance_api.route('/api/request-mantainance', methods=["POST", "GET"])
 @checkToken
