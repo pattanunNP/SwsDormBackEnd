@@ -39,9 +39,8 @@ class mantainance:
         for img in data['Image']:
             re = mantainance.stringToRGB(img, ref,user)
             data.update({'Image': {'Url': re}})
-
         
-
+        mantainance.sendNotify2Admin(data)
         mantainance.db.child("work").child(ref).push(data, user['idToken'])
         response = {
             
@@ -74,7 +73,7 @@ class mantainance:
             respone = user['localId']
             return respone
         else:
-            return jsonify({"message":"error"}),400
+            return jsonify({"message":user}),400
 
 
     
