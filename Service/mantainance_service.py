@@ -29,8 +29,8 @@ class mantainance:
 
     @staticmethod
     def sendNotify2Admin(data):
-        r = requests.post(mantainance.url, headers=mantainance.headers, data={'message': f"{data['WorkInfo']['Name']}{data['WorkInfo']['RoomCode']}{data['WorkInfo']['RoomNumber']}{data['WorkInfo']['Discription']}"})
-        r = requests.post(mantainance.url,header=mantainance.headers,data={'imageFullsize':f"{data['Image']['Url']}"})
+        r = requests.post(mantainance.url, headers=mantainance.headers, data={'message': f"ชื่อ: {data['WorkInfo']['Name']} เลขห้อง:{data['WorkInfo']['RoomCode']}{data['WorkInfo']['RoomNumber']} อาการเสีย: {data['WorkInfo']['Discription']}"})
+        r = requests.post(mantainance.url,header=mantainance.headers,data={'imageFullsize':data['Image']['Url']})
         print("Msg: ", r.text, "Status: ", r.status_code)
         print("Msg: ",r.text, "Status: ",r.status_code)
     
