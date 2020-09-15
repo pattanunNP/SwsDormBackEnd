@@ -29,7 +29,7 @@ class mantainance:
 
     @staticmethod
     def sendNotify2Admin(data):
-        r = requests.post(mantainance.url, headers=mantainance.headers, data={'message': data['WorkInfo']})
+        r = requests.post(mantainance.url, headers=mantainance.headers, data={'message': f"{data['WorkInfo']}"})
         print("Msg: ",r.text, "Status: ",r.status_code)
     
     @staticmethod
