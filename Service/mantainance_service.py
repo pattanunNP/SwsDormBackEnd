@@ -1,6 +1,6 @@
 from flask import Flask, request,jsonify
 from Util.RefCode import refCode
-
+import requests
 from PIL import Image
 import base64,os
 from Firebase.FirebaseController import Firebase
@@ -11,6 +11,10 @@ class mantainance:
     auth = Firebase.auth()
     db = Firebase.database()
     storage = Firebase.storage()
+    url = 'https://notify-api.line.me/api/notify'
+    token = ENV.LINETOKEN
+    headers = {'content-type':'application/x-www-form-urlencoded','Authorization':'Bearer '+token}
+
 
     @staticmethod
     def stringToRGB(base64_string,ref,user):
@@ -23,7 +27,10 @@ class mantainance:
         mantainance.storage.child(f"{ref}/{filename[13:-2]}.png").put(f'./image/{filename[13:-2]}.png')
         return mantainance.storage.child(f"{ref}/{filename[13:-2]}.png").get_url(user['idToken'])
 
-        
+    @staticmethod
+    def sendNotify2Admin(data):
+        r = requests.post(mantainance.url, headers=mantainance.headers, data={'message': data})
+        print("Msg: ",r.text, "Status: ",r.status_code)
     
     @staticmethod
     def request(data):
@@ -32,6 +39,9 @@ class mantainance:
         for img in data['Image']:
             re = mantainance.stringToRGB(img, ref,user)
             data.update({'Image': {'Url': re}})
+
+        
+
         mantainance.db.child("work").child(ref).push(data, user['idToken'])
         response = {
             
