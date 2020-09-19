@@ -52,6 +52,23 @@ class mantainance:
         return response
 
     @staticmethod
+    def Update(data):
+        print(data)
+        user = mantainance.auth.sign_in_with_email_and_password(ENV.FIREBASE_EMAIL, ENV.FIREBASE_PASSWORD)
+        if data['Status'] != "":
+           mantainance.db.child("work").child(data['refId']).child(data['Id']).child("WorkInfo").update({"Status": data['Status']}, user['idToken'])
+        if data['Discription'] != "":
+           mantainance.db.child("work").child(data['refId']).child(data['Id']).child("WorkInfo").update({"FixDetail": data['Discription']},user['idToken'])
+        return "ok"
+
+    @staticmethod
+    def Delete(data):
+        print(data)
+        user = mantainance.auth.sign_in_with_email_and_password(ENV.FIREBASE_EMAIL, ENV.FIREBASE_PASSWORD)
+        mantainance.db.child("work").child(data['refId']).child(data['Id']).remove(user['idToken'])
+        return "ok"
+
+    @staticmethod
     def track(refcode):
         lists = []
         print(refcode)
@@ -61,28 +78,36 @@ class mantainance:
                 lists.append(data.val())
         except:
             pass
-    
-            
         return lists
 
    
     @staticmethod
     def login(userInput):
-        user = mantainance.auth.sign_in_with_email_and_password(userInput['email'], userInput['password'])
-      
-        if user['idToken'] != 0:
-            respone = user['localId']
+        try:
+            user = mantainance.auth.sign_in_with_email_and_password(userInput['email'], userInput['password'])
+            if user['idToken'] != 0:
+               
+                respone = {
+                    "value":user['localId'],
+                    "error":"",
+              
+                 }
+                return respone
+        except:
+            
+            respone = {
+                "value":"error",
+                "error":"login error maybe user or password inconrrect",
+              
+            }
             return respone
-        else:
-            return jsonify({"message":user}),400
-
-
-    
+      
     @staticmethod
     def allwork():
         lists = []
         try:
             track_data = mantainance.db.child("work").get()
+           
             for data in track_data.each():
                 lists.append(data.val())
             # print(lists)
@@ -91,3 +116,5 @@ class mantainance:
             pass
 
         return lists
+
+   

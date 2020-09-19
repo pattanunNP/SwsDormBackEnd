@@ -24,7 +24,7 @@ def track():
 def admin():
     userInput = request.json
     respone = mantainance.login(userInput)
-    return respone
+    return jsonify({"message": respone}),200
 
 @mantainance_api.route('/api/get-allwork')
 def getallwork():
@@ -39,3 +39,18 @@ def request_matainance():
     data = request.json
     result = mantainance.request(data)
     return result
+
+@mantainance_api.route('/api/update', methods=["POST", "GET"])
+@checkToken
+def update():
+    value = request.json
+    result = mantainance.Update(value)
+    return result
+
+@mantainance_api.route('/api/delete', methods=["POST", "GET"])
+@checkToken
+def delete():
+    value = request.json
+    result = mantainance.Delete(value)
+    return result
+
